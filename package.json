@@ -1,0 +1,22 @@
+{
+  "name": "la-belle-table-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GaelleF/la-belle-table-server.git"
+  },
+  "author": "gaelleF",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GaelleF/la-belle-table-server/issues"
+  },
+  "homepage": "https://github.com/GaelleF/la-belle-table-server#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}

@@ -6,8 +6,10 @@ const path = require('path')
 const fs = require('fs')
 
 const app = express()
-//const upload = util.promisify( multer({ dest : 'images/' }))
-const upload = multer({ dest : 'images/' })
+//const upload = util.promisify( multer({ dest : 'public/' }))
+const upload = multer({ dest : 'public/' })
+const publicDirectory = path.join(__dirname, '/public')
+let jsonData = fs.readFileSync('./mock/indexImages.json', 'utf8');
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -18,7 +20,8 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extend: false }))
 
-// app.use('/images', express.static(publicImagesPath))
+app.use(express.static('public'));
+// app.use('/public', express.static(publicpublicPath))
 
 
 app.get('/', (req, res) => {
@@ -33,17 +36,30 @@ app.post('/photos/upload', upload.single('newFile'),(req,res,next) => {
   }
   const newFile = req.file
   console.log('request post', req.file)
-  return res.send('request receive!') 
+  let jsonParsedata = JSON.parse(jsonData);
+  let newUrl = {url: req.file.filename};
+  jsonParsedata.push(newUrl)
+  console.log('request pos JSON', jsonParsedata )
+  fs.writeFile('./mock/indexImages.json',JSON.stringify(jsonParsedata, null, '\t'), 'utf8',(resJson) =>{
+    console.log('WRITEFile : ', resJson)
+    return res.send('request receive!') 
+})
 })
 
-app.get('/photos', (req,res,next) => {
- fs.readdir('images',(err,files) => {
+app.get('/photos', (req,res,next) => { // not use
+ fs.readdir('public',(err,files) => {
   console.log('FILES GET : ',files)
-  res.sendFile(__dirname+'/images/fac65ee74ab0ea6daef4e41490c1030d')
+  console.log('dirname : ', __dirname+'/public/fac65ee74ab0ea6daef4e41490c1030d.jpg')
+  res.sendFile(__dirname+'/public/fac65ee74ab0ea6daef4e41490c1030d.jpg')
  })
+})
+
+app.get('/url', (req, res, next) => {
+  console.log('jsondata ', jsonData)
+  res.json(jsonData)
 })
 
 
 app.listen(5000, () => {
-  console.log('server listen on 5000')
+  console.log('server listen on 5000 ', jsonData)
 })

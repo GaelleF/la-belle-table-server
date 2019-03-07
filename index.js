@@ -21,8 +21,6 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extend: false }))
 
 app.use(express.static('public'));
-// app.use('/public', express.static(publicpublicPath))
-
 
 app.get('/', (req, res) => {
   console.log('who ask me? ')
@@ -31,17 +29,13 @@ app.get('/', (req, res) => {
 
 app.post('/photos/upload', upload.single('newFile'),(req,res,next) => {
   if (!req.file) {
-    console.log('request post fail', req.file)
     return res.send('request fail')
   }
   const newFile = req.file
-  console.log('request post', req.file)
   let jsonParsedata = JSON.parse(jsonData);
   let newUrl = {url: req.file.filename};
   jsonParsedata.push(newUrl)
-  console.log('request pos JSON', jsonParsedata )
   fs.writeFile('./mock/indexImages.json',JSON.stringify(jsonParsedata, null, '\t'), 'utf8',(resJson) =>{
-    console.log('WRITEFile : ', resJson)
     return res.send('request receive!') 
 })
 })

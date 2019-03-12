@@ -32,12 +32,14 @@ app.post('/photos/upload', upload.single('newFile'),(req,res,next) => {
     return res.send('request fail')
   }
   const newFile = req.file
+  console.log('request : ', req)
   let jsonParsedata = JSON.parse(jsonData);
-  let newUrl = {url: req.file.filename};
+  let newUrl = {url: req.file.filename, title: req.body.title};
   jsonParsedata.push(newUrl)
   fs.writeFile('./mock/indexImages.json',JSON.stringify(jsonParsedata, null, '\t'), 'utf8',(resJson) =>{
     return res.send('request receive!') 
-})
+  })
+  .catch(err=> console.error('write fail ', error))
 })
 
 app.get('/photos', (req,res,next) => { // not use
